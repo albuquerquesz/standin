@@ -37,7 +37,6 @@ COPY --from=build /app /app
 COPY deploy/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 # The API reads and writes uploads under apps/api/public. Keep it on a volume.
-VOLUME ["/app/apps/api/public"]
 EXPOSE 3001
 ENTRYPOINT ["entrypoint.sh"]
 
@@ -46,3 +45,4 @@ COPY --from=build /app/apps/web/dist /srv/web
 COPY deploy/Caddyfile /etc/caddy/Caddyfile
 
 FROM app AS guara
+RUN rm -rf /app/apps/api/public && ln -s /data /app/apps/api/public
